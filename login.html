@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <head>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        </head>
+        <script>
+            
+            function HandleLoginResponse(response)
+            {
+                var text = JSON.parse(response);
+            //	document.getElementById("textResponse").innerHTML = response+"<p>";
+                document.getElementById("textResponse").innerHTML = "response: "+text+"<p>";
+            }
+        </script>
+
+        <title>Login</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+
+    <body>
+        
+        
+
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>PokeQuiz Login Page</h2>
+                <p>Login or register from here to access.</p>   
+            </div>
+            <div class="main">
+                <div class="col-md-6 col-sm-12 mx-auto">
+                    <div class="login-form">
+                        <form id="loginform">
+                            <h4>Login:</h4>
+                            <div class="form-group">
+                                <label>User Name</label>
+                                <input type="text" class="form-control" id="lusername">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" id="lpassword">
+                            </div>
+                            <button type="submit" class="btn btn-black" id="button2">Login</button>
+                        </form>
+
+                    <form id="registerform">
+                        <h4>Register:</h4>
+                            <div class="form-group">
+                            <label>Create User Name</label>
+                            <input type="text" class="form-control" id="username">
+                        </div>
+                        <div class="form-group">
+                            <label>Create Password</label>
+                            <input type="password" class="form-control" id="password">
+                        </div>
+                        <button type="submit" class="btn btn-secondary" id="button1">Register</button>
+                    </form>
+                </div>        
+            </div>    
+        </div>
+    
+
+        <script>
+            $(document).ready(function(){
+                $("#loginform").submit((e) => {
+                    const username = $("#lusername").val();
+                    const password = $("#lpassword").val();
+                    
+                    e.preventDefault();
+                    
+                    $.ajax({
+                        url:'login.php',
+                        method:'POST',
+                        dataType: 'json',
+                        data:{
+                            username:username,
+                            password:password
+                        },
+                        success:function(data){
+                            console.log(data)
+                            if(data){
+                                window.location.href = "index.html"
+                            }else{
+                                alert("There was an error logging you in");
+                            }
+                        }
+                    });
+                })
+                
+                $("#registerform").submit((e) => {
+                    e.preventDefault();
+                    const username = $("#username").val();
+                    const password = $("#password").val();
+                    $.ajax({
+                        url:'register.php',
+                        method:'POST',
+                        dataType: 'json',
+                        data:{
+                            username:username,
+                            password:password
+                        },
+                        success:function(data){
+                            if(!data.error){
+                                window.location.href = "index.html"
+                            }else{
+                                alert(data.message)
+                            }
+                        }
+                    });
+                })
+            });
+        </script>
+        <!--
+        //	<form action="/registerinfo.php" method="post">
+        //		New Username: <input type="text" name="newusername"><br>		New Password: <input type="text" name="newpassword"><br>
+            <input type="submit">
+        </form>-->
+    </body>
+</html>
+
+
+
+
