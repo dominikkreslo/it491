@@ -9,12 +9,10 @@
 				const types = ["fire", "water", "rock", "normal", "flying"];
 				const identifier = Math.floor(Math.random() * Math.floor(150)) + 1
 				return $.ajax({
-                        url:`index.php`,
-						method:'POST',
-						dataType: 'json',
-						data: {
-							identifier: identifier
-						},
+						url:`https://pokeapi.co/api/v2/pokemon/${identifier}`,
+						method:'GET',
+						
+
                         success:function(pokemon){
 							document.getElementById("question").innerHTML = `What main type is ${pokemon.name}`
 							const labels = document.getElementById('quizForm').querySelectorAll(".form-check-label")
