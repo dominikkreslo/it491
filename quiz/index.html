@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+
+			function callAPI(){
+				const types = ["fire", "water", "rock", "normal", "flying"];
+				const identifier = Math.floor(Math.random() * Math.floor(150)) + 1
+				return $.ajax({
+                        url:`index.php`,
+						method:'POST',
+						dataType: 'json',
+						data: {
+							identifier: identifier
+						},
+                        success:function(pokemon){
+							document.getElementById("question").innerHTML = `What main type is ${pokemon.name}`
+							const labels = document.getElementById('quizForm').querySelectorAll(".form-check-label")
+							const choosenElement = Math.floor(Math.random() * Math.floor(3)) + 1;
+							const radios = document.getElementById('quizForm').querySelectorAll(".form-check-input")
+							const type = pokemon.types[0].type.name
+							let newArr = [...types];
+							newArr = newArr.filter(item => item !== type)
+							newArr = newArr.sort(() => 0.5 - Math.random())
+							console.log(newArr)
+							for(i = 0; i <= 4; i++){
+								console.log(i)
+								if(i == choosenElement){
+									console.log('test')
+									labels[choosenElement].innerHTML = type
+									radios[choosenElement].value = "good"
+								}else{
+									console.log('testing')
+									labels[i].innerHTML = newArr[i]
+								}
+							}
+                        }
+                    });
+			}
+
+			$(document).ready(() => {
+				callAPI();	
+				$("#form").submit((e) => {
+					console.log('egg')
+					e.preventDefault();
+					if($('input[name=answer]:checked')[0].value === "good"){
+						alert("Correct!");
+						callAPI();
+						$('input[name=answer]:checked')[0].checked = false
+					}else{
+						alert("Try again!")
+					}
+				})
+			})
+		</script>
+	</head>
+	<body>
+		<!-- <?php 
+			session_start();
+			if(isset($_SESSION['user'])){
+				echo "
+					<button type='button' class='btn btn-primary' onClick='function(){
+						window.location.href = 'login.html'
+					}'>Login</button>
+				";
+			}else{
+				echo "
+					<button type='button' class='btn btn-primary' onClick='function(){
+						window.location.href = 'logout.php'
+					}'>logout</button>
+				";
+			}
+		?> -->
+		
+		<form id="form">
+			<div class="form-check" id="quizForm">
+				<h1 id="question"></h1>
+				<label class="form-check-label" id="label1"></label>
+				<input class="form-check-input" name="answer" type="radio" id="radio1" value="bad">
+				<br>
+				<label class="form-check-label" id="label2"></label>
+				<input class="form-check-input" name="answer" type="radio" id="radio2" value="bad">
+				<br>
+				<label class="form-check-label" id="label3"></label>
+				<input class="form-check-input" name="answer" type="radio" id="radio3" value="bad">
+				<br>
+				<label class="form-check-label" id="label4"></label>
+				<input class="form-check-input" name="answer" type="radio" id="radio4" value="bad">
+				<br>
+				<button type="submit" class="btn btn-black" id="button">Submit</button>
+			</div>
+			
+		</form>
+	</body>
+</html>
